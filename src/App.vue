@@ -21,7 +21,9 @@ export default {
   },
 
   data: () => ({
-    //
   }),
+  mounted() {
+    this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
+  }
 };
 </script>

@@ -15,3 +15,15 @@ function sendRequest(address, endpoint, method, body, headers) {
 export function getAllFirefighters() {
     return sendRequest(backendAddress, 'firefighters', 'get', {}, {})
 }
+
+export function createFirefighter(firefighter) {
+    return sendRequest(backendAddress, 'firefighters', 'post', firefighter, {})
+}
+
+export function createPosition(position) {
+    return sendRequest(backendAddress, 'positions', 'post', position, {})
+}
+
+export function getAllPositions() {
+    return sendRequest(backendAddress, 'positions', 'get', {}, {})
+}

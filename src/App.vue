@@ -1,10 +1,12 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      color="grey"
-      dark
+        app
+        color="grey"
+        dark
     >
+      <create-firefighter-dialog/>
+      <create-position-dialog/>
     </v-app-bar>
     <v-main>
       <router-view/>
@@ -14,14 +16,18 @@
 
 <script>
 
+import CreateFirefighterDialog from "@/components/CreateFirefighterDialog";
+import CreatePositionDialog from "@/components/CreatePositionDialog";
+
 export default {
   name: 'App',
 
   components: {
+    CreatePositionDialog,
+    CreateFirefighterDialog
   },
 
-  data: () => ({
-  }),
+  data: () => ({}),
   mounted() {
     this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
   }

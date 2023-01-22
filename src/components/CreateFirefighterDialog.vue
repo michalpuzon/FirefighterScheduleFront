@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <v-dialog width="50%" v-model="dialog" transition="dialog-bottom-transition">
+    <v-dialog width="25rem" v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
             class="primary"
@@ -16,31 +16,47 @@
           Dodanie Strażaka
         </v-card-title>
         <v-text-field
+            class="ma-5"
             dark
             label="Imię"
             v-model="newFirefighter.name"
         ></v-text-field>
         <v-text-field
+            class="ma-5"
             dark
             label="Nazwisko"
             v-model="newFirefighter.lastName"
         ></v-text-field>
         <v-text-field
+            class="ma-5"
             type="number"
             dark
             label="Numer Służbowy"
             v-model="newFirefighter.workNumber"
         ></v-text-field>
         <v-text-field
+            class="ma-5"
             dark
             label="Ranga"
             v-model="newFirefighter.rang"
         ></v-text-field>
         <v-text-field
+            class="ma-5"
             dark
             label="Jednostka"
             v-model="newFirefighter.unit"
         ></v-text-field>
+        <v-radio-group
+            class="ma-5" v-model="newFirefighter.shiftId" row>
+          <v-radio
+              dark
+              v-for="shift in shifts"
+              :key="shift.id"
+              :label="`Zmiana: ${shift.number}`"
+              :value="shift.id"
+          ></v-radio>
+
+        </v-radio-group>
         <v-card-actions class="justify-center">
           <v-btn dark color="indigo" @click="createFirefighter()">
             <v-icon>mdi-plus</v-icon>
@@ -95,7 +111,8 @@ export default {
         lastName: '',
         workNumber: '',
         rang: '',
-        unit: ''
+        unit: '',
+        shiftId: '',
       },
       dialog: false,
       snackbarSuccess: false,
@@ -104,11 +121,13 @@ export default {
   },
   methods: {
     createFirefighter() {
+      console.log(this.newFirefighter)
       if (this.newFirefighter.name !== ''
           && this.newFirefighter.lastName !== ''
           && this.newFirefighter.workNumber !== ''
           && this.newFirefighter.rang !== ''
-          && this.newFirefighter.unit !== '') {
+          && this.newFirefighter.unit !== ''
+          && this.newFirefighter.shiftId !== '') {
         createFirefighter(this.newFirefighter).then(res => {
           this.$store.dispatch('fetchFirefighters', res.data)
           this.dialog = false;
@@ -118,9 +137,15 @@ export default {
           this.newFirefighter.workNumber = '';
           this.newFirefighter.rang = '';
           this.newFirefighter.unit = '';
+          this.newFirefighter.shiftId = '';
         })
       } else this.snackbarError = true;
     },
+  },
+  computed: {
+    shifts() {
+      return this.$store.getters.getShifts
+    }
   }
 }
 </script>
@@ -131,9 +156,6 @@ export default {
   margin: 10px;
   text-align: center;
   align-content: center;
-}
-.v-dialog .v-text-field {
-  margin: 10px;
 }
 
 </style>

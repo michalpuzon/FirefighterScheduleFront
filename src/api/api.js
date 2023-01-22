@@ -27,3 +27,15 @@ export function createPosition(position) {
 export function getAllPositions() {
     return sendRequest(backendAddress, 'positions', 'get', {}, {})
 }
+
+export function getAllSchedules() {
+    return sendRequest(backendAddress, 'schedules', 'get', {}, {})
+}
+
+export function createSchedule(schedule) {
+    return sendRequest(backendAddress, 'schedules', 'post', schedule, {})
+}
+
+export function getAllShifts() {
+    return sendRequest(backendAddress, 'shifts', 'get', {}, {})
+}

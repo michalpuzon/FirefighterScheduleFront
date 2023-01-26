@@ -20,6 +20,10 @@ export function createFirefighter(firefighter) {
     return sendRequest(backendAddress, 'firefighters', 'post', firefighter, {})
 }
 
+export function addPositionToFirefighter(firefighterId, positionId) {
+    return sendRequest(backendAddress, 'firefighters/' + firefighterId + "/" + positionId, 'put', {}, {})
+}
+
 export function createPosition(position) {
     return sendRequest(backendAddress, 'positions', 'post', position, {})
 }
@@ -32,8 +36,8 @@ export function getAllSchedules() {
     return sendRequest(backendAddress, 'schedules', 'get', {}, {})
 }
 
-export function createSchedule(schedule) {
-    return sendRequest(backendAddress, 'schedules', 'post', schedule, {})
+export function createSchedule(startDate, endDate, requiredPositions) {
+    return sendRequest(backendAddress, 'schedules?startDate='+startDate+'&endDate='+endDate, 'post', requiredPositions, {})
 }
 
 export function getAllShifts() {

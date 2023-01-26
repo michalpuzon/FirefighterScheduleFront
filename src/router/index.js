@@ -1,6 +1,7 @@
 import VueRouter from "vue-router";
 import Vue from "vue";
-import ScheduleView from "@/Views/ScheduleView";
+import ScheduleView from "@/viewComponents/ScheduleView";
+import FirefightersListView from "@/viewComponents/FirefightersListView";
 
 Vue.use(VueRouter)
 
@@ -9,6 +10,11 @@ const routes = [
         path: '/schedule',
         name: 'Schedule',
         component: ScheduleView,
+    },
+    {
+        path: '/firefighters',
+        name: 'FirefightersList',
+        component: FirefightersListView,
     },
 ]
 

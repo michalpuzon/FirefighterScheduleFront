@@ -138,6 +138,7 @@ export default {
           this.newFirefighter.rang = '';
           this.newFirefighter.unit = '';
           this.newFirefighter.shiftId = '';
+          this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
         })
       } else this.snackbarError = true;
     },

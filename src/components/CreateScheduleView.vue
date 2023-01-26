@@ -17,8 +17,18 @@
           Tworzenie Harmonogramu
         </v-card-title>
         <v-row justify="center" style="margin: 10px">
-          <v-date-picker locale="pl" v-model="newSchedule.startDate">Początek Harmonogramu</v-date-picker>
-          <v-date-picker locale="pl" v-model="newSchedule.endDate">Koniec Harmonogramu</v-date-picker>
+          <v-date-picker locale="pl" v-model="startDate">Początek Harmonogramu</v-date-picker>
+          <v-date-picker locale="pl" v-model="endDate">Koniec Harmonogramu</v-date-picker>
+        </v-row>
+        <v-row justify="center" style="margin: 10px">
+          <v-combobox
+              v-model="selectedPositions"
+              multiple
+              :items="positions"
+              item-text="name"
+              label="Potrzebne stanowiska"
+              dark
+          ></v-combobox>
         </v-row>
         <v-card-actions class="justify-center">
           <v-btn dark color="indigo" @click="createSchedule()">
@@ -54,7 +64,7 @@
         <v-icon class="pr-3" dark large>mdi-alert-circle</v-icon>
         <v-layout column>
           <div>
-            Brakuje danych potrzebnych do utworzenia Harmonogramu
+            Podane daty są nieprawidłowe do utworzenia harmonogramu
           </div>
         </v-layout>
       </v-layout>
@@ -89,10 +99,9 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       errorScheduleAlreadyExists: false,
-      newSchedule: {
-        startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-        endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      },
+      selectedPositions: [],
+      startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     }
   },
   methods: {
@@ -103,19 +112,22 @@ export default {
         return null;
       }
       let currentDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      if (this.newSchedule.startDate >= currentDate && this.newSchedule.startDate < this.newSchedule.endDate) {
-        createSchedule(this.newSchedule).then(() => {
+      if (this.startDate >= currentDate && this.startDate < this.endDate) {
+        createSchedule(this.startDate, this.endDate, this.selectedPositions.map(position => position.id)).then(() => {
           this.$store.dispatch('fetchSchedule').catch((error) => alert(error.response.data))
-          this.newSchedule = {
-            startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-            endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-          }
+          this.startDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+          this.endDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
           this.dialog = false;
           this.snackbarSuccess = true;
         })
       } else this.snackbarError = true;
     }
   },
+  computed: {
+    positions() {
+      return this.$store.getters.getPositions
+    }
+  }
 }
 </script>
 

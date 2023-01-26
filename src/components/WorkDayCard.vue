@@ -15,9 +15,6 @@
 export default {
   name: "WorkDayCard",
   props: ['workDay'],
-  mounted() {
-    console.log(this.workDay)
-  }
 }
 </script>
 

@@ -9,12 +9,12 @@
             v-on="on"
             v-bind="attrs"
         >
-          Dodaj Pozycję
+          Stwórz Pozycję
         </v-btn>
       </template>
       <v-card color="grey darken-2">
         <v-card-title class="justify-center white--text">
-          Dodanie Pozycji
+          Stworzenie Pozycji
         </v-card-title>
         <v-text-field
             dark
@@ -39,7 +39,7 @@
         <v-icon class="pr-3" dark large>mdi-check-circle</v-icon>
         <v-layout column>
           <div>
-            Pozycja została poprawnie dodana
+            Pozycja została poprawnie stworzona
           </div>
         </v-layout>
       </v-layout>
@@ -55,7 +55,7 @@
         <v-icon class="pr-3" dark large>mdi-alert-circle</v-icon>
         <v-layout column>
           <div>
-            Brakuje danych potrzebnych do dodania pozycji
+            Brakuje danych potrzebnych do stworzenia pozycji
           </div>
         </v-layout>
       </v-layout>
@@ -85,6 +85,7 @@ export default {
               this.dialog = false;
               this.snackbarSuccess = true;
               this.newPosition.name = ''
+              this.$store.dispatch('fetchPositions').catch((error) => alert(error.response.data))
             }
         )
       } else this.snackbarError = true

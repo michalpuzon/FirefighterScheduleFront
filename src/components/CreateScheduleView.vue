@@ -30,6 +30,9 @@
               dark
           ></v-combobox>
         </v-row>
+        <v-row justify="center" style="margin: 10px">
+          <v-text-field dark type="number" label="liczba strażaków na służbie" v-model="fireFightersLimit"></v-text-field>
+        </v-row>
         <v-card-actions class="justify-center">
           <v-btn dark color="indigo" @click="createSchedule()">
             <v-icon>mdi-plus</v-icon>
@@ -64,7 +67,7 @@
         <v-icon class="pr-3" dark large>mdi-alert-circle</v-icon>
         <v-layout column>
           <div>
-            Podane daty są nieprawidłowe do utworzenia harmonogramu
+            Dane są nie uzupełnione lub podane daty się nie zgadzają
           </div>
         </v-layout>
       </v-layout>
@@ -99,6 +102,7 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       errorScheduleAlreadyExists: false,
+      fireFightersLimit: 5,
       selectedPositions: [],
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -112,8 +116,8 @@ export default {
         return null;
       }
       let currentDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      if (this.startDate >= currentDate && this.startDate < this.endDate) {
-        createSchedule(this.startDate, this.endDate, this.selectedPositions.map(position => position.id)).then(() => {
+      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.fireFightersLimit > 0 && this.fireFightersLimit < 10) {
+        createSchedule(this.startDate, this.endDate, this.selectedPositions.map(position => position.id), this.fireFightersLimit).then(() => {
           this.$store.dispatch('fetchSchedule').catch((error) => alert(error.response.data))
           this.startDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
           this.endDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)

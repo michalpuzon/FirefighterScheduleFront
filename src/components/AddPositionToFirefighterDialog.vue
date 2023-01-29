@@ -18,14 +18,6 @@
         </v-card-title>
         <div class="justify-center">
           <v-autocomplete
-              :items="positions"
-              v-model="selectedPosition"
-              return-object
-              item-text="name"
-              dark
-              label="Pozycja">
-          </v-autocomplete>
-          <v-autocomplete
               :items="firefighters"
               v-model="selectedFirefighter"
               return-object
@@ -33,6 +25,14 @@
               dark
               label="Strażak">
             Strażak
+          </v-autocomplete>
+          <v-autocomplete
+              :items="selectedFirefighter?firefighterPositions(selectedFirefighter) : positions"
+              v-model="selectedPosition"
+              return-object
+              item-text="name"
+              dark
+              label="Pozycja">
           </v-autocomplete>
         </div>
         <v-card-actions class="justify-center">
@@ -97,19 +97,26 @@ export default {
     },
     positions() {
       return this.$store.getters.getPositions
+    },
+    firefighterPositions: function (firefighter) {
+      let positions = this.$store.getters.getPositions;
+      return positions.filter(function (el) {
+        return firefighter.positions.indexOf(el) < 0;
+      });
     }
   },
   methods: {
     addPositionToFirefighter() {
       if (this.selectedFirefighter != null && this.selectedPosition != null) {
         addPositionToFirefighter(this.selectedFirefighter.id, this.selectedPosition.id).then(() => {
-          this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
-          this.selectedPosition = null
-          this.selectedFirefighter = null
-          this.snackbarSuccess = true
-          this.dialog = false
-        }
-    )}else this.snackbarError = true
+              this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
+              this.selectedPosition = null
+              this.selectedFirefighter = null
+              this.snackbarSuccess = true
+              this.dialog = false
+            }
+        )
+      } else this.snackbarError = true
     },
     getFullName(item) {
       return `${item.name} ${item.lastName} - ${item.workNumber}`;

@@ -2,10 +2,16 @@ import VueRouter from "vue-router";
 import Vue from "vue";
 import ScheduleView from "@/viewComponents/ScheduleView";
 import FirefightersListView from "@/viewComponents/FirefightersListView";
+import HomeView from "@/viewComponents/HomeView";
 
 Vue.use(VueRouter)
 
 const routes = [
+    {
+        path: '',
+        name: 'Home',
+        component: HomeView,
+    },
     {
         path: '/schedule',
         name: 'Schedule',
@@ -17,7 +23,6 @@ const routes = [
         component: FirefightersListView,
     },
 ]
-
 
 
 const router = new VueRouter({

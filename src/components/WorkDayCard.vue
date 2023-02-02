@@ -5,7 +5,7 @@
   </v-card-title>
   <div class="justify-center">
   <h4>Strażacy</h4>
-  <li v-for="firefighter in workDay.firefighters" :key="firefighter.id">{{firefighter.name}} {{firefighter.lastName}} - {{firefighter.workNumber}}</li>
+  <li class="firefighter-name" v-for="firefighter in workDay.firefighters" :key="firefighter.id">{{firefighter.name}} {{firefighter.lastName}}</li>
   </div>
   <v-card-text>Zmiana: {{workDay.shiftId}}</v-card-text>
 </v-card>
@@ -20,7 +20,12 @@ export default {
 
 <style scoped>
 
+.firefighter-name {
+  margin-left: 5px;
+}
+
 .work-day-card {
+  opacity: 0.95;
   width: 100%;
   height: 100%;
 }

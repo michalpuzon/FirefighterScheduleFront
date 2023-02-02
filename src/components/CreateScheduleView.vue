@@ -21,18 +21,24 @@
           <v-date-picker locale="pl" v-model="endDate">Koniec Harmonogramu</v-date-picker>
         </v-row>
         <v-row justify="center" style="margin: 10px">
-          <v-combobox
-              v-model="selectedPositions"
-              multiple
-              :items="positions"
-              item-text="name"
-              label="Potrzebne stanowiska"
+          <v-select
               dark
-          ></v-combobox>
+              item-text="name"
+              v-model="selectedPositions"
+              :items="positions"
+              multiple
+              label="Wybierz wymagane pozycje"
+              return-object
+          ></v-select>
         </v-row>
-        <v-row justify="center" style="margin: 10px">
-          <v-text-field dark type="number" label="liczba strażaków na służbie" v-model="fireFightersLimit"></v-text-field>
-        </v-row>
+          <form v-for="position in selectedPositions" :key="position.id" class="form-container">
+            <div class="form-item">
+              {{ position.name }}:
+            </div>
+            <div class="form-input">
+              <v-text-field dark type="number" v-model.number="position.quantity" />
+            </div>
+          </form>
         <v-card-actions class="justify-center">
           <v-btn dark color="indigo" @click="createSchedule()">
             <v-icon>mdi-plus</v-icon>
@@ -110,17 +116,32 @@ export default {
   },
   methods: {
     createSchedule() {
+      console.log(this.selectedPositions)
+      let numberOfFirefighters = 0;
+      let requiredPositions = []
+      this.selectedPositions.forEach(position => {
+        numberOfFirefighters += position.quantity
+        for (let i = 0; i < position.quantity; i++) {
+          requiredPositions.push({
+            id: position.id,
+            name: position.name
+          });
+        }
+      });
+      console.log(requiredPositions)
+      console.log(numberOfFirefighters)
       if (this.$store.getters.getSchedule !== undefined) {
         this.dialog = false;
         this.errorScheduleAlreadyExists = true;
         return null;
       }
       let currentDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.fireFightersLimit > 0 && this.fireFightersLimit < 10) {
-        createSchedule(this.startDate, this.endDate, this.selectedPositions.map(position => position.id), this.fireFightersLimit).then(() => {
+      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.fireFightersLimit > 0 && this.fireFightersLimit < this.firefighters.length) {
+        createSchedule(this.startDate, this.endDate, requiredPositions.map(position => position.id), numberOfFirefighters).then(() => {
           this.$store.dispatch('fetchSchedule').catch((error) => alert(error.response.data))
           this.startDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
           this.endDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+          this.selectedPositions = []
           this.dialog = false;
           this.snackbarSuccess = true;
         })
@@ -130,11 +151,33 @@ export default {
   computed: {
     positions() {
       return this.$store.getters.getPositions
+    },
+    firefighters() {
+      return this.$store.getters.getFirefighters;
     }
   }
 }
 </script>
 
 <style scoped>
+
+.form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-item {
+  color: white;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.form-input {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  flex-grow: 1;
+}
 
 </style>

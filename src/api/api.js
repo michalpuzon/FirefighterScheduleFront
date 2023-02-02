@@ -21,7 +21,7 @@ export function createFirefighter(firefighter) {
 }
 
 export function addPositionToFirefighter(firefighterId, positionId) {
-    return sendRequest(backendAddress, 'firefighters/add' + firefighterId + "/" + positionId, 'put', {}, {})
+    return sendRequest(backendAddress, 'firefighters/add/' + firefighterId + "/" + positionId, 'put', {}, {})
 }
 
 export function removePositionFromFirefighter(firefighterId, positionId) {

@@ -27,8 +27,10 @@
             Strażak
           </v-autocomplete>
           <v-autocomplete
-              :items="selectedFirefighter?firefighterPositions(selectedFirefighter) : positions"
-              v-model="selectedPosition"
+              multiple
+              :disabled="!selectedFirefighter"
+              :items="positions"
+              v-model="selectedPositions"
               return-object
               item-text="name"
               dark
@@ -87,35 +89,36 @@ export default {
       dialog: false,
       snackbarSuccess: false,
       snackbarError: false,
-      selectedPosition: null,
+      selectedPositions: [],
       selectedFirefighter: null,
     }
   },
+  watch: {},
   computed: {
     firefighters() {
       return this.$store.getters.getFirefighters
     },
     positions() {
-      return this.$store.getters.getPositions
-    },
-    firefighterPositions: function (firefighter) {
-      let positions = this.$store.getters.getPositions;
+      let positions = this.$store.getters.getPositions
+      if (!this.selectedFirefighter) return positions
       return positions.filter(function (el) {
-        return firefighter.positions.indexOf(el) < 0;
-      });
-    }
+        return !this.selectedFirefighter.positions.some(p => p.id === el.id);
+      }.bind(this));
+    },
+
   },
   methods: {
-    addPositionToFirefighter() {
-      if (this.selectedFirefighter != null && this.selectedPosition != null) {
-        addPositionToFirefighter(this.selectedFirefighter.id, this.selectedPosition.id).then(() => {
-              this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
-              this.selectedPosition = null
-              this.selectedFirefighter = null
-              this.snackbarSuccess = true
-              this.dialog = false
-            }
-        )
+    async addPositionToFirefighter() {
+      if (this.selectedFirefighter != null && this.selectedPositions != null) {
+        for (let position of this.selectedPositions) {
+          addPositionToFirefighter(this.selectedFirefighter.id, position.id).then(async () => {
+            await this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
+          })
+        }
+        this.selectedPositions = []
+        this.selectedFirefighter = null
+        this.snackbarSuccess = true
+        this.dialog = false
       } else this.snackbarError = true
     },
     getFullName(item) {

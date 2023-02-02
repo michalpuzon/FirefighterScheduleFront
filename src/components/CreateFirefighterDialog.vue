@@ -37,7 +37,7 @@
         <v-text-field
             class="ma-5"
             dark
-            label="Stanowisko"
+            label="Stopień służbowy"
             v-model="newFirefighter.rang"
         ></v-text-field>
         <v-text-field

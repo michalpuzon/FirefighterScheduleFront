@@ -1,14 +1,15 @@
 <template>
-  <v-app>
+  <v-app style="background-image: url(https://cdn.pixabay.com/photo/2019/04/23/12/57/brand-4149479_960_720.jpg)">
     <v-app-bar
         app
         color="grey"
         dark
     >
-      <create-firefighter-dialog/>
-      <create-position-dialog/>
-      <add-position-to-firefighter-dialog/>
-      <create-schedule-view/>
+      <v-btn class="primary ma-1" @click="backToMenu" v-if="$route.name !== 'Home'">Strona Główna</v-btn>
+      <create-firefighter-dialog v-if="$route.name === 'FirefightersList'"/>
+      <create-position-dialog v-if="$route.name === 'FirefightersList'"/>
+      <add-position-to-firefighter-dialog v-if="$route.name === 'FirefightersList'"/>
+      <create-schedule-view v-if="this.$store.getters.getFirefighters.length > 0"/>
       <v-btn class="primary ma-1" @click="goToFirefightersView">Strażacy</v-btn>
       <v-btn class="primary ma-1" v-if="this.$store.getters.getSchedule !== null && this.$store.getters.getSchedule !== undefined " @click="goToScheduleView">Harmonogram</v-btn>
 
@@ -39,10 +40,16 @@ export default {
   data: () => ({}),
   methods: {
     goToScheduleView(){
-      this.$router.replace('/schedule')
+      if (this.$route.name !== 'Schedule')
+      this.$router.push('/schedule')
     },
     goToFirefightersView(){
-      this.$router.replace('/firefighters')
+      if (this.$route.name !== 'FirefightersList')
+      this.$router.push('/firefighters')
+    },
+    backToMenu(){
+      if (this.$route.name !== 'Home')
+      this.$router.push('/')
     }
   },
   mounted() {
@@ -53,3 +60,10 @@ export default {
   }
 };
 </script>
+<style>
+#app {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+</style>

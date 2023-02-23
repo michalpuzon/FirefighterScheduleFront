@@ -11,12 +11,29 @@
       <add-position-to-firefighter-dialog v-if="$route.name === 'FirefightersList'"/>
       <create-schedule-view v-if="this.$store.getters.getFirefighters.length > 0"/>
       <v-btn class="primary ma-1" @click="goToFirefightersView">Strażacy</v-btn>
-      <v-btn class="primary ma-1" v-if="this.$store.getters.getSchedule !== null && this.$store.getters.getSchedule !== undefined " @click="goToScheduleView">Harmonogram</v-btn>
+      <v-btn class="primary ma-1"
+             v-if="this.$store.getters.getSchedule !== null && this.$store.getters.getSchedule !== undefined "
+             @click="goToScheduleView">Harmonogram
+      </v-btn>
 
     </v-app-bar>
     <v-main>
       <router-view/>
     </v-main>
+    <v-footer
+        style="opacity: 0.95"
+        class="footer"
+        color="grey"
+        dark
+        padless
+    >
+      <v-card class="flex justify-center"
+              color="grey"
+              flat
+              tile>
+      <v-card-text class="text-center" style="color: white">Gloria Deo, auxilio proximo. - Bogu na chwałę, bliźniemu na ratunek.</v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -39,17 +56,17 @@ export default {
 
   data: () => ({}),
   methods: {
-    goToScheduleView(){
+    goToScheduleView() {
       if (this.$route.name !== 'Schedule')
-      this.$router.push('/schedule')
+        this.$router.push('/schedule')
     },
-    goToFirefightersView(){
+    goToFirefightersView() {
       if (this.$route.name !== 'FirefightersList')
-      this.$router.push('/firefighters')
+        this.$router.push('/firefighters')
     },
-    backToMenu(){
+    backToMenu() {
       if (this.$route.name !== 'Home')
-      this.$router.push('/')
+        this.$router.push('/')
     }
   },
   mounted() {
@@ -65,5 +82,11 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 </style>

@@ -52,7 +52,6 @@ export default {
         {
           text: 'Jednostka',
           value: 'unit',
-          sortable: false,
         },
         {
           text: 'Zmiana',

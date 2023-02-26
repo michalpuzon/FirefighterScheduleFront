@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let backendAddress = 'http://localhost:8081/api/'
+let backendAddress = 'https://firefightersschedule.herokuapp.com/api/'
 
 function sendRequest(address, endpoint, method, body, headers) {
     headers['Content-Type'] = 'application/json'
@@ -38,6 +38,10 @@ export function getAllPositions() {
 
 export function getAllSchedules() {
     return sendRequest(backendAddress, 'schedules', 'get', {}, {})
+}
+
+export function removeSchedule(scheduleId) {
+    return sendRequest(backendAddress, 'schedules/' + scheduleId, 'delete', {}, {})
 }
 
 export function createSchedule(startDate, endDate, requiredPositions, limit) {

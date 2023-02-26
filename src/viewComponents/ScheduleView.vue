@@ -30,7 +30,7 @@ export default {
   mounted() {
     setTimeout(function () {
       if (this.schedule === null || this.schedule === undefined) {
-        this.$router.replace('/')
+        this.$router.push('/')
       }
     }, 500)
   }

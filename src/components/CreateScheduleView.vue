@@ -108,7 +108,6 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       errorScheduleAlreadyExists: false,
-      fireFightersLimit: 5,
       selectedPositions: [],
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -116,7 +115,6 @@ export default {
   },
   methods: {
     createSchedule() {
-      console.log(this.selectedPositions)
       let numberOfFirefighters = 0;
       let requiredPositions = []
       this.selectedPositions.forEach(position => {
@@ -128,15 +126,13 @@ export default {
           });
         }
       });
-      console.log(requiredPositions)
-      console.log(numberOfFirefighters)
       if (this.$store.getters.getSchedule !== undefined) {
         this.dialog = false;
         this.errorScheduleAlreadyExists = true;
         return null;
       }
       let currentDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.fireFightersLimit > 0 && this.fireFightersLimit < this.firefighters.length) {
+      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.numberOfFirefighters > 0 && this.numberOfFirefighters < this.firefighters.length) {
         createSchedule(this.startDate, this.endDate, requiredPositions.map(position => position.id), numberOfFirefighters).then(() => {
           this.$store.dispatch('fetchSchedule').catch((error) => alert(error.response.data))
           this.startDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)

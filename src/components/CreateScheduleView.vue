@@ -132,7 +132,7 @@ export default {
         return null;
       }
       let currentDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && this.numberOfFirefighters > 0 && this.numberOfFirefighters < this.firefighters.length) {
+      if (this.startDate >= currentDate && this.startDate < this.endDate && this.selectedPositions !== [] && numberOfFirefighters > 0 && numberOfFirefighters <= this.firefighters.length) {
         createSchedule(this.startDate, this.endDate, requiredPositions.map(position => position.id), numberOfFirefighters).then(() => {
           this.$store.dispatch('fetchSchedule').catch((error) => alert(error.response.data))
           this.startDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)

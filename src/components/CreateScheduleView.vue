@@ -3,8 +3,7 @@
     <v-dialog width="40rem" v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-            style="margin: 5px;"
-            class="primary"
+            class="primary ma-2"
             color="white"
             v-on="on"
             v-bind="attrs"
@@ -140,6 +139,9 @@ export default {
           this.selectedPositions = []
           this.dialog = false;
           this.snackbarSuccess = true;
+        }).catch(error => {
+          alert(error.response.data)
+          this.dialog = false;
         })
       } else this.snackbarError = true;
     }

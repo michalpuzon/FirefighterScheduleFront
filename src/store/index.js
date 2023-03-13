@@ -11,6 +11,8 @@ export default new Vuex.Store({
         schedule: null,
         shifts: [],
         workDays: [],
+        currentFirefighter: null,
+        token: null,
     },
     mutations: {
         setFirefighters(state, firefighters) {
@@ -28,6 +30,12 @@ export default new Vuex.Store({
         setWorkDays(state, workDays) {
             state.workDays = workDays
         },
+        setCurrentFirefighter(state, firefighter) {
+            state.currentFirefighter = firefighter
+        },
+        setToken(state, token) {
+            state.token = token
+        }
     },
     actions: {
         fetchFirefighters(context) {
@@ -66,5 +74,11 @@ export default new Vuex.Store({
         getShifts(state) {
             return state.shifts
         },
+        getCurrentFirefighter(state) {
+            return state.currentFirefighter
+        },
+        getToken(state) {
+            return state.token
+        }
     }
 })

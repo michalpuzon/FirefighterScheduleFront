@@ -3,7 +3,7 @@
     <v-dialog width="25rem" v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-            class="primary"
+            class="primary ma-2"
             color="white"
             v-on="on"
             v-bind="attrs"
@@ -46,7 +46,22 @@
             label="Jednostka"
             v-model="newFirefighter.unit"
         ></v-text-field>
+        <v-text-field
+            class="ma-5"
+            dark
+            label="Hasło"
+            v-model="newFirefighter.password"
+        ></v-text-field>
+        <v-select
+            v-model="newFirefighter.role"
+            class="ma-5"
+            dark
+            item-text="name"
+            item-value="value"
+            label="Rola"
+            :items="roles"></v-select>
         <v-radio-group
+            v-if="newFirefighter.role && newFirefighter.role !== 'ROLE_ADMIN'"
             class="ma-5" v-model="newFirefighter.shiftId" row>
           <v-radio
               dark
@@ -113,6 +128,8 @@ export default {
         rang: '',
         unit: '',
         shiftId: '',
+        role: '',
+        password: '',
       },
       dialog: false,
       snackbarSuccess: false,
@@ -121,13 +138,13 @@ export default {
   },
   methods: {
     createFirefighter() {
-      console.log(this.newFirefighter)
       if (this.newFirefighter.name !== ''
           && this.newFirefighter.lastName !== ''
           && this.newFirefighter.workNumber !== ''
           && this.newFirefighter.rang !== ''
           && this.newFirefighter.unit !== ''
-          && this.newFirefighter.shiftId !== '') {
+          && this.newFirefighter.role !== ''
+          && this.newFirefighter.password !== '') {
         createFirefighter(this.newFirefighter).then(res => {
           this.$store.dispatch('fetchFirefighters', res.data)
           this.dialog = false;
@@ -138,6 +155,8 @@ export default {
           this.newFirefighter.rang = '';
           this.newFirefighter.unit = '';
           this.newFirefighter.shiftId = '';
+          this.newFirefighter.role = '';
+          this.newFirefighter.password = '';
           this.$store.dispatch("fetchFirefighters").catch((error) => alert(error.response.data))
         })
       } else this.snackbarError = true;
@@ -145,8 +164,17 @@ export default {
   },
   computed: {
     shifts() {
+      if (this.$store.getters.getCurrentFirefighter?.role === "ROLE_ADMIN")
       return this.$store.getters.getShifts
-    }
+      else return this.$store.getters.getShifts.filter(s => s.id === this.$store.getters.getCurrentFirefighter?.shift?.id)
+    },
+    roles() {
+      return this.$store.getters.getCurrentFirefighter?.role === 'ROLE_ADMIN' ? [
+        {name: 'Strażak', value: 'ROLE_FIREFIGHTER'},
+        {name: 'Dowódca zmiany', value: 'ROLE_COMMANDER'},
+        {name: 'Dowódca jednostki', value: 'ROLE_ADMIN'},
+      ] : [{name: 'Strażak', value: 'ROLE_FIREFIGHTER'}]
+    },
   }
 }
 </script>

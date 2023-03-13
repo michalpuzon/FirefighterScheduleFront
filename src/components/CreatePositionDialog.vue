@@ -3,8 +3,7 @@
     <v-dialog width="20rem" v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-            style="margin: 5px;"
-            class="primary"
+            class="primary ma-2"
             color="white"
             v-on="on"
             v-bind="attrs"

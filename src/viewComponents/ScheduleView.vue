@@ -2,7 +2,7 @@
   <v-row>
     <v-col
         class="work-day-card-col"
-        v-for="workDay in schedule?.workDays"
+        v-for="workDay in workDays"
         :key="workDay.id"
     >
       <work-day-card :work-day="workDay"/>
@@ -19,21 +19,19 @@ export default {
   name: "ScheduleView",
   components: {WorkDayCard},
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
-    schedule() {
-      return this.$store.getters.getSchedule
+    workDays() {
+      if (this.$store.getters.getCurrentFirefighter?.role === "ROLE_ADMIN")
+        return this.$store.getters.getSchedule?.workDays
+      else if (this.$store.getters.getCurrentFirefighter?.role === "ROLE_COMMANDER")
+        return this.$store.getters.getSchedule?.workDays.filter(w => w.shift.id === this.$store.getters.getCurrentFirefighter?.shift?.id)
+      else if (this.$store.getters.getCurrentFirefighter?.role === "ROLE_FIREFIGHTER")
+        return this.$store.getters.getSchedule?.workDays.filter(workDay => workDay.firefighters.some(firefighter => firefighter.id === this.$store.getters.getCurrentFirefighter?.id));
+      else return null;
     }
   },
-  mounted() {
-    setTimeout(function () {
-      if (this.schedule === null || this.schedule === undefined) {
-        this.$router.push('/')
-      }
-    }, 500)
-  }
 }
 </script>
 

@@ -3,8 +3,7 @@
     <v-dialog width="20rem" v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-            style="margin: 5px;"
-            class="primary"
+            class="primary ma-2"
             color="white"
             v-on="on"
             v-bind="attrs"
@@ -13,11 +12,12 @@
         </v-btn>
       </template>
       <v-card color="grey darken-2">
-        <v-card-title class="justify-center white--text">
+        <v-card-title class="justify-center white--text ma-2">
           Dodanie Pozycji
         </v-card-title>
         <div class="justify-center">
           <v-autocomplete
+              class="autocomplete"
               :items="firefighters"
               v-model="selectedFirefighter"
               return-object
@@ -27,6 +27,7 @@
             Strażak
           </v-autocomplete>
           <v-autocomplete
+              class="autocomplete"
               multiple
               :disabled="!selectedFirefighter"
               :items="positions"
@@ -96,7 +97,10 @@ export default {
   watch: {},
   computed: {
     firefighters() {
-      return this.$store.getters.getFirefighters
+      if (this.$store.getters.getCurrentFirefighter?.role === "ROLE_ADMIN")
+        return this.$store.getters.getFirefighters
+      else
+        return this.$store.getters.getFirefighters.filter(f => f.shift?.id === this.$store.getters.getCurrentFirefighter?.shift?.id)
     },
     positions() {
       let positions = this.$store.getters.getPositions
@@ -129,6 +133,8 @@ export default {
 </script>
 
 <style scoped>
-
+.autocomplete {
+  margin: 10px;
+}
 
 </style>

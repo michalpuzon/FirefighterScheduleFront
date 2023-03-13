@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-let backendAddress = 'http://localhost:8081/api/'
+// let backendAddress = 'http://localhost:8081/api/'
+let backendAddress = 'https://firefightersschedule.herokuapp.com/api/'
 
 function sendRequest(address, endpoint, method, body, headers) {
     headers['Content-Type'] = 'application/json'
